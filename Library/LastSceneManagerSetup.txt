@@ -1,4 +1,4 @@
 sceneSetups:
-- path: C:/Users/Mete/Documents/Flappy/Assets/level1.unity
+- path: Assets/Scenes/StandardMode.unity
   isLoaded: 1
   isActive: 1

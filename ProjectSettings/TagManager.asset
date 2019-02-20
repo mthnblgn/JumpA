@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - mainCamera
+  - yol
+  - Distance
+  - Start
+  - Araba
+  - Agac
   layers:
   - Default
   - TransparentFX
