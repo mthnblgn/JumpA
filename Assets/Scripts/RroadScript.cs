@@ -31,7 +31,11 @@ public class RroadScript : MonoBehaviour
     {
         foreach (var Car in Cars)
         {
+            if (Car!=null)
+            {
             Car.GetComponent<Rigidbody>().velocity = new Vector3(carSpeed, 0, gameObject.GetComponent<Rigidbody>().velocity.z);
+
+            }
         }
     }
 }

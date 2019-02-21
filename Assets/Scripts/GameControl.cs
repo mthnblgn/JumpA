@@ -43,7 +43,6 @@ public class GameControl : MonoBehaviour
             GameObject a = Instantiate(Cimen, new Vector3(0, 0, i * CimenUzunluk), Quaternion.identity);
             Baslangiclar[i] = a;
             SinirNoktaZ = a.transform.position.z + CimenUzunluk / 2;
-            Debug.Log(SinirNoktaZ);
         }
 
         Baslangiclar[18] = Instantiate(Kaldirim, new Vector3(0, 0, KaldirimUzunluk * .5f + SinirNoktaZ), Quaternion.identity);
@@ -125,6 +124,7 @@ public class GameControl : MonoBehaviour
         #endregion
         if (BasliadiMi)
         {
+            EnUzakNoktaZ = SinirNoktaZ;
             if (!Baslangic)
             {
                 foreach (var b in Baslangiclar)
@@ -141,40 +141,43 @@ public class GameControl : MonoBehaviour
             #region Hiz Optimizsyonu
             distance.GetComponent<Rigidbody>().velocity = GameSpeedVec;
             Isaret.GetComponent<Rigidbody>().velocity = GameSpeedVec;
-            foreach (var obj in GameList)
+            foreach (GameObject obj in GameList)
             {
-                obj.GetComponent<Rigidbody>().velocity = GameSpeedVec;
+                if (obj != null)
+                {
+                    obj.GetComponent<Rigidbody>().velocity = GameSpeedVec;
+
+                }
             }
             #endregion
             #region YolCimenlikRandomizasyonu
             //**Cimen**
-            if (siraHangisinde == "Cimen" && Isaret.transform.position.z <= SinirNoktaZ- EnUzakNoktaZ)
+            if (siraHangisinde == "Cimen" && Isaret.transform.position.z <= SinirNoktaZ)
             {
-                EnUzakNoktaZ = SinirNoktaZ;
-
                 int rndCimen = Random.Range(1, 5);
                 for (int i = 0; i <= rndCimen; i++)
                 {
-                    GameObject cimenInstace = Instantiate(Cimen, new Vector3(0, 0, CimenUzunluk * .5f + i * CimenUzunluk), Quaternion.identity);
+                    GameObject cimenInstace = Instantiate(Cimen, new Vector3(0, 0, EnUzakNoktaZ + CimenUzunluk * .5f + i * CimenUzunluk), Quaternion.identity);
 
                     cimenInstace.GetComponent<Rigidbody>().velocity = GameSpeedVec;
                     GameList.Add(cimenInstace);
                     if (i == rndCimen)
                     {
-                        EnUzakNoktaZ = (i + 1) * CimenUzunluk;
+                        EnUzakNoktaZ = SinirNoktaZ + (i + 1) * CimenUzunluk;
                         siraHangisinde = "Yol";
-                        Isaret.transform.position = Vector3.zero;
+
                     }
 
                 }
                 //**Kaldirim**
-                GameObject Kal = Instantiate(Kaldirim, new Vector3(0, 0, KaldirimUzunluk * .5f + EnUzakNoktaZ), Quaternion.identity);
+                GameObject Kal = Instantiate(Kaldirim, new Vector3(0, 0, EnUzakNoktaZ + KaldirimUzunluk * .5f), Quaternion.identity);
                 EnUzakNoktaZ += KaldirimUzunluk;
                 Kal.GetComponent<Rigidbody>().velocity = GameSpeedVec;
                 GameList.Add(Kal);
+                Isaret.transform.position = new Vector3(0, 0, EnUzakNoktaZ);
             }
             //**Yol**
-            if (siraHangisinde == "Yol" && Isaret.transform.position.z <= EnUzakNoktaZ)
+            if (siraHangisinde == "Yol" && Isaret.transform.position.z <= SinirNoktaZ)
             {
                 EnUzakNoktaZ = SinirNoktaZ;
                 int rndYol = Random.Range(1, 5);
@@ -183,14 +186,14 @@ public class GameControl : MonoBehaviour
                     for (int i = 0; i <= rndYol; i++)
                     {
 
-                        GameObject yolInstace = Instantiate(rRoad, new Vector3(0, 0, EnUzakNoktaZ+ i * YolUzunluk + YolUzunluk * .5f), Quaternion.identity);
+                        GameObject yolInstace = Instantiate(rRoad, new Vector3(0, 0, EnUzakNoktaZ + i * YolUzunluk + YolUzunluk * .5f), Quaternion.identity);
                         yolInstace.GetComponent<Rigidbody>().velocity = GameSpeedVec;
                         GameList.Add(yolInstace);
                         if (i == rndYol)
                         {
-                            EnUzakNoktaZ += (i + 1) * YolUzunluk;
+                            EnUzakNoktaZ = SinirNoktaZ + (i + 1) * YolUzunluk;
                             siraHangisinde = "Cimen";
-                            Isaret.transform.position = new Vector3(0,0, EnUzakNoktaZ);
+
                         }
 
                     }
@@ -201,14 +204,14 @@ public class GameControl : MonoBehaviour
                     for (int i = 0; i <= rndYol; i++)
                     {
 
-                        GameObject yolInstace = Instantiate(lRoad, new Vector3(0, 0, i * YolUzunluk + YolUzunluk * .5f), Quaternion.identity);
+                        GameObject yolInstace = Instantiate(lRoad, new Vector3(0, 0, EnUzakNoktaZ + i * YolUzunluk + YolUzunluk * .5f), Quaternion.identity);
                         yolInstace.GetComponent<Rigidbody>().velocity = GameSpeedVec;
                         GameList.Add(yolInstace);
                         if (i == rndYol)
                         {
-                            EnUzakNoktaZ = (i + 1) * YolUzunluk;
+                            EnUzakNoktaZ = SinirNoktaZ + (i + 1) * YolUzunluk;
                             siraHangisinde = "Cimen";
-                            
+
                         }
 
                     }
