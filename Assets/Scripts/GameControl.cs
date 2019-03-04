@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Data;
-using System.Data.SqlClient;
+
 
 
 
 public class GameControl : MonoBehaviour
 {
+    public GameObject Karakter;
     public GameObject rRoad;
     public GameObject lRoad;
     public GameObject Cimen;
@@ -22,9 +22,8 @@ public class GameControl : MonoBehaviour
     float EnUzakNoktaZ = 0;
     string siraHangisinde = "Yol";
     bool Baslangic = false;
-    public bool BasliadiMi = false;
+    bool BasladiMi = false;
     bool SeritYonu = true;
-    public Button startBtn;
     public GameObject distance;
     public Vector3 GameSpeedVec;
     private string connectionString;
@@ -33,8 +32,10 @@ public class GameControl : MonoBehaviour
     float YolUzunluk = new float();
     float CimenUzunluk = new float();
     float KaldirimUzunluk = new float();
+    public AudioClip[] GameMusics;
     void Start()
     {
+        PlayMusic();
         YolUzunluk = rRoad.GetComponent<BoxCollider>().size.z * rRoad.transform.localScale.z;
         CimenUzunluk = Cimen.GetComponent<BoxCollider>().size.z * Cimen.transform.localScale.z;
         KaldirimUzunluk = Kaldirim.GetComponent<BoxCollider>().size.z * Kaldirim.transform.localScale.z;
@@ -51,7 +52,7 @@ public class GameControl : MonoBehaviour
     void Update()
     {
         #region Sahne
-        if (SinirNoktaZ <= 150)
+        if (SinirNoktaZ <= 200)
         {
 
 
@@ -122,8 +123,19 @@ public class GameControl : MonoBehaviour
             Isaret.transform.position = new Vector3(0, 0, SinirNoktaZ);
         }
         #endregion
-        if (BasliadiMi)
+        if (Karakter.transform.position.y<=2)
         {
+            BasladiMi = true;
+        }
+        
+          if (gameObject.GetComponent<AudioSource>().volume < 1)
+        {
+            gameObject.GetComponent<AudioSource>().volume += 0.01f;
+        }
+        if (BasladiMi)
+        {
+
+
             EnUzakNoktaZ = SinirNoktaZ;
             if (!Baslangic)
             {
@@ -225,17 +237,10 @@ public class GameControl : MonoBehaviour
                 EnUzakNoktaZ += KaldirimUzunluk / 2;
                 Isaret.transform.position = new Vector3(0, 0, EnUzakNoktaZ);
             }
-            #endregion
         }
+        #endregion
     }
-    public void Baslat()
-    {
-        BasliadiMi = true;
-        if (Input.GetMouseButtonUp(0))
-        {
-            startBtn.gameObject.SetActive(false);
-        }
-    }
+
     float RandomSayidaOlusturVeDiz_Z(GameObject Olusturulacak, Vector3 Nerede, int minAdet, int maxAdet)
     {
         float sonuncuYer = 0;
@@ -255,6 +260,17 @@ public class GameControl : MonoBehaviour
     {
         SceneManager.LoadScene("StandardMode", LoadSceneMode.Single);
 
+    }
+    private void PlayMusic()
+    {
+        AudioSource source = this.GetComponent<AudioSource>();
+        int sayi = Random.Range(0, 4);
+        source.clip = GameMusics[sayi];
+        source.Play();
+    }
+    public void GoBackToMenu()
+    {
+        SceneManager.LoadScene("StartMenu");
     }
 
 }

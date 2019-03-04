@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 33033892941581550}
   - component: {fileID: 23090696945383396}
   - component: {fileID: 3510608892908923239}
-  - component: {fileID: 111211692303036581}
   - component: {fileID: 7482078855653649417}
+  - component: {fileID: 5464721423577233031}
   m_Layer: 0
   m_Name: roadL
   m_TagString: Untagged
@@ -96,20 +96,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 118
   m_CollisionDetection: 0
---- !u!64 &111211692303036581
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552327617338152}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: a457df374c9110d41ad1f9a8fdb66fa9, type: 3}
 --- !u!114 &7482078855653649417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,3 +115,16 @@ MonoBehaviour:
   - {fileID: 1375956768573714, guid: 1e126213dc7fe7b4094fe8a3bca04f15, type: 3}
   - {fileID: 1941472807533444, guid: e5aaabb25b7d31d47ae47600773b259f, type: 3}
   - {fileID: 1378251453077460, guid: 8c60d14993f0ff14285d30dd5fcb355e, type: 3}
+--- !u!65 &5464721423577233031
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552327617338152}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 25, y: 0.03, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0}

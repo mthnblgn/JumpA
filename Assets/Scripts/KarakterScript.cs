@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class KarakterScript : MonoBehaviour
 {
+
     Rigidbody KarakterBody;
     Vector3 MouseOrigin = new Vector3();
     public Canvas c;
@@ -17,38 +18,68 @@ public class KarakterScript : MonoBehaviour
     Vector3 firstPositionCam;
     public GameControl GameControl;
     public Button restartBtn;
+    Animator AlienAnimator;
+    public Avatar RuningAvatar;
     public GameObject Destroyer;
+    public Button startBtn;
+    float movementParameter = 0;
+    bool DustuMu=false;
     void Start()
     {
+        AlienAnimator = gameObject.GetComponent<Animator>();
         KarakterBody = GetComponent<Rigidbody>();
-        firstPositionChar = gameObject.transform.position;
+        firstPositionChar = new Vector3(0, 2, 3.9f);
         firstPositionCam = Camera.transform.position;
     }
 
     void Update()
     {
+        if (gameObject.transform.position.y <= 2&&!DustuMu)
+        {
+            KarakterBody.useGravity = false;
+            KarakterBody.velocity = Vector3.zero;
+            BasladiMi = true;
+            DustuMu = true;
+        }
         if (BasladiMi)
         {
+            if (AlienAnimator != null && movementParameter < 1)
+            {
+                AlienAnimator.avatar = RuningAvatar;
+                AlienAnimator.SetFloat("MouseClick", movementParameter);
+                movementParameter += Time.deltaTime;
+
+            }
+
             #region Standalone
             if (Input.GetMouseButtonDown(0))
             {
                 MouseOrigin = Input.mousePosition;
             }
+
             SingleAxisDragMovement(KarakterBody, 40, MouseOrigin);
+
             #endregion
             #region Mobile
             #endregion
-            
-                c.GetComponentInChildren<TextMeshProUGUI>().text = "Distance: " + ((KarakterBody.transform.position.z - distance.transform.position.z) / 4).ToString("0.00") + "m";
-            
+            Camera.transform.position = firstPositionCam - firstPositionChar + gameObject.transform.position;
 
+            c.GetComponentInChildren<TextMeshProUGUI>().text = "Distance: " + ((KarakterBody.transform.position.z - distance.transform.position.z) / 4).ToString("0.00") + "m";
         }
-        Camera.transform.position = firstPositionCam - firstPositionChar + gameObject.transform.position;
+        else if (DustuMu && !BasladiMi)
+        {
+            Camera.transform.position = firstPositionCam - firstPositionChar + gameObject.transform.position;
+
+            KarakterBody.useGravity = true;
+        }
+
+
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag=="Agac")
+        if (collision.gameObject.tag == "Agac")
         {
             Destroyer.SetActive(false);
             BasladiMi = false;
@@ -59,7 +90,7 @@ public class KarakterScript : MonoBehaviour
 
         if (collision.gameObject.tag == "Araba")
         {
-            GameControl.BasliadiMi = false;
+
             Destroyer.SetActive(false);
             BasladiMi = false;
             gameObject.GetComponent<Rigidbody>().AddForce((collision.relativeVelocity + new Vector3(0, 50, 0)));
